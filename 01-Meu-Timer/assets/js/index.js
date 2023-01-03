@@ -1,86 +1,51 @@
 const meuEscopo = () => {
-    const relogio = document.querySelector('.relogio')
-    const iniciar = document.querySelector('.iniciar')
-    const pausar = document.querySelector('.pausar')
-    const zerar = document.querySelector('.zerar')
+   const relogio = document.querySelector('.relogio')
+   const iniciar = document.querySelector('.iniciar')
+   const pausar = document.querySelector('.pausar')
+   const zerar = document.querySelector('.zerar')
+   
+   let segundos = 0
+   let timer
+   let estadoTimer = false
 
-    let segundos = 0
-    let minutos = 0
-    let horas = 0
+   iniciar.addEventListener('click', function(event) {
+        (estadoTimer) ?  true:iniciaRelogio()   
+   })
 
-    let tempo;
-
-    let estadoTempo = false
-
-    // exibeHora()
-
-    iniciar.addEventListener('click', function(event) {
-        (estadoTempo) ?  true:iniciaTempo()
-    })
-
-    pausar.addEventListener('click', function(event) {
-        (estadoTempo) ?  pausaTempo():true
-    })
-
-    zerar.addEventListener('click', function(event) {
-        zeraTempo()
-    })
-
-    const iniciaTempo = () => {
-        estadoTempo = true
-        tempo = setInterval(function() {
-            segundos++
-            relogio.classList.remove('tempo-amarelo')
-            relogio.classList.remove('tempo-vermelho')
-            relogio.innerHTML = `${zeroAEsquerda(horas)}:${zeroAEsquerda(minutos)}:${zeroAEsquerda(segundos)}`
-            if(segundos==60) incrementaMinutos()
-        }, 1000)
-    }
-
-    const incrementaMinutos = () => {
-        minutos++
-        segundos = 0
-        console.log(minutos)
-        if(minutos==60) incrementaHoras()
-    }
-
-    const incrementaHoras = () => {
-        horas++
-        minutos = 0
-        segundos = 0
-        if(horas==24) {
-            horas = 0
-        }
-    }
-
-    const pausaTempo = () => {
-        estadoTempo = false
-        setTimeout(function() {
-            clearInterval(tempo)
-            relogio.classList.remove('tempo-vermelho')
+   pausar.addEventListener('click', function(event) {
+        if(estadoTimer) {
+            relogio.classList.remove('tempo-vermelho')    
             relogio.classList.add('tempo-amarelo')
-        },0)
-    }
-
-    const zeraTempo = () => {
-        estadoTempo = false
+        }
+        estadoTimer = false     
+        clearInterval(timer)
+   })
+   
+   zerar.addEventListener('click', function(event) {
+        relogio.classList.remove('tempo-amarelo')
+        relogio.classList.add('tempo-vermelho')
+        estadoTimer = false
+        clearInterval(timer)
         segundos = 0
-        minutos = 0
-        horas = 0
-        setTimeout(function() {
-            clearInterval(tempo)
-            relogio.classList.remove('tempo-amarelo')
-            relogio.classList.add('tempo-vermelho')
-            relogio.innerHTML = `${zeroAEsquerda(horas)}:${zeroAEsquerda(minutos)}:${zeroAEsquerda(segundos)}`
-        },0)
+        relogio.innerHTML = '00:00:00'
+   })
+
+   function crisHoraDosSegundos(segundos) {
+        const data = new Date(segundos*1000)
+        return data.toLocaleTimeString('pt-BR', {
+            hour12: false,
+            timeZone: 'UTC'
+        })
     }
 
-    function zeroAEsquerda (num) {
-        return num >= 10 ? num : `0${num}`
-    }
-
-    function formataHora() {
-        return `${zeroAEsquerda(horas)}`
+    function iniciaRelogio() {
+        relogio.classList.remove('tempo-amarelo')
+        relogio.classList.remove('tempo-vermelho')
+        estadoTimer = true
+        timer = setInterval(function() {
+            segundos++
+            relogio.innerHTML = crisHoraDosSegundos(segundos)
+        }, 1000)
     }
 }
 
