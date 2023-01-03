@@ -7,27 +7,31 @@ const meuEscopo = () => {
    let segundos = 0
    let timer
    let estadoTimer = false
-
-   iniciar.addEventListener('click', function(event) {
-        (estadoTimer) ?  true:iniciaRelogio()   
-   })
-
-   pausar.addEventListener('click', function(event) {
-        if(estadoTimer) {
-            relogio.classList.remove('tempo-vermelho')    
-            relogio.classList.add('tempo-amarelo')
-        }
-        estadoTimer = false     
-        clearInterval(timer)
-   })
    
-   zerar.addEventListener('click', function(event) {
-        relogio.classList.remove('tempo-amarelo')
-        relogio.classList.add('tempo-vermelho')
-        estadoTimer = false
-        clearInterval(timer)
-        segundos = 0
-        relogio.innerHTML = '00:00:00'
+   document.addEventListener('click', function(e) {
+        const el = e.target
+
+        if(el.classList.contains('iniciar')) {
+            (estadoTimer) ?  true:iniciaRelogio()
+        }
+
+        if(el.classList.contains('pausar')) {
+            if(estadoTimer) {
+                relogio.classList.remove('tempo-vermelho')    
+                relogio.classList.add('tempo-amarelo')
+            }
+            estadoTimer = false     
+            clearInterval(timer)
+        }
+
+        if(el.classList.contains('zerar')) {
+            relogio.classList.remove('tempo-amarelo')
+            relogio.classList.add('tempo-vermelho')
+            estadoTimer = false
+            clearInterval(timer)
+            segundos = 0
+            relogio.innerHTML = '00:00:00'
+        }
    })
 
    function crisHoraDosSegundos(segundos) {
